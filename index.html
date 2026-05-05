@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Informe Maestro - Gestion en Bienestar VP Negocios de Personas 2025</title>
+<style>
+:root{--azul:#003366;--azul2:#0066cc;--bg:#f7f8fa;--blanco:#fff;--borde:#e5e7eb;--tx:#374151;--tx2:#6b7280;--tx3:#9ca3af;--verde:#16a34a;--rojo:#dc2626;--naranja:#ea580c;--amarillo:#ca8a04}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:system-ui,-apple-system,'Segoe UI',sans-serif;background:var(--bg);color:var(--tx);line-height:1.6}
+.page-header{padding:2rem 2.5rem 1rem;border-bottom:1px solid var(--borde);background:var(--blanco)}
+.header-top{display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap;margin-bottom:1rem}
+.page-title{font-size:1.75rem;font-weight:800;color:#111827}
+.jira-badge{display:inline-block;padding:.25rem .7rem;border-radius:6px;background:#eff6ff;color:var(--azul2);font-size:.78rem;font-weight:700;text-decoration:none}
+.jira-badge:hover{background:#dbeafe}
+.tabs{display:flex;gap:.5rem;flex-wrap:wrap}
+.tab{padding:.5rem 1.2rem;border-radius:8px;font-size:.84rem;font-weight:600;cursor:pointer;border:1px solid var(--borde);background:var(--blanco);color:var(--tx2);transition:all .15s}
+.tab.active{background:var(--azul);color:var(--blanco);border-color:var(--azul)}
+.tab:hover:not(.active){background:#f0f1f3}
+.tab-content{display:none;padding:2rem 2.5rem;max-width:1400px}
+.tab-content.active{display:block}
+.section{margin-bottom:2.5rem}
+.section-title{font-size:1.25rem;font-weight:700;color:#111827;margin-bottom:1rem;padding-bottom:.5rem;border-bottom:2px solid var(--azul)}
+.section-subtitle{font-size:1rem;font-weight:700;color:var(--azul);margin-bottom:.7rem;margin-top:1.5rem}
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin-bottom:1.5rem}
+.kpi-card{background:var(--blanco);border-radius:10px;padding:1.2rem;box-shadow:0 1px 3px rgba(0,0,0,.06);border-left:4px solid var(--azul2);text-align:center}
+.kpi-card .value{font-size:1.6rem;font-weight:800;color:#111827}
+.kpi-card .label{font-size:.75rem;color:var(--tx2);margin-top:.2rem}
+.kpi-card.green{border-left-color:var(--verde)}
+.kpi-card.red{border-left-color:var(--rojo)}
+.kpi-card.orange{border-left-color:var(--naranja)}
+.tbl-wrap{overflow-x:auto;background:var(--blanco);border-radius:10px;box-shadow:0 1px 3px rgba(0,0,0,.06);margin-bottom:1.5rem}
+table{width:100%;border-collapse:collapse;font-size:.8rem}
+thead{background:#f9fafb}
+th{padding:.7rem .9rem;text-align:left;font-weight:700;color:var(--tx2);border-bottom:2px solid var(--borde);white-space:nowrap}
+td{padding:.6rem .9rem;border-bottom:1px solid var(--borde);color:var(--tx);vertical-align:top}
+tr:hover{background:#f9fafb}
+.badge{display:inline-block;padding:.15rem .5rem;border-radius:6px;font-size:.7rem;font-weight:600;white-space:nowrap}
+.badge-done{background:#dcfce7;color:var(--verde)}
+.badge-progress{background:#fef9c3;color:var(--amarillo)}
+.badge-blocked{background:#fed7aa;color:var(--naranja)}
+.badge-pending{background:#fee2e2;color:var(--rojo)}
+.info-box{background:var(--blanco);border-radius:10px;padding:1.2rem 1.5rem;box-shadow:0 1px 3px rgba(0,0,0,.06);margin-bottom:1rem;border-left:4px solid var(--azul2)}
+.info-box.risk{border-left-color:var(--rojo)}
+.info-box.warning{border-left-color:var(--naranja)}
+.info-box.dep{border-left-color:var(--azul)}
+.bubble-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:1.2rem;margin-bottom:1.5rem}
+.bubble{background:var(--blanco);border-radius:16px;padding:1.5rem;box-shadow:0 2px 8px rgba(0,0,0,.08);position:relative;overflow:hidden}
+.bubble::before{content:'';position:absolute;top:0;left:0;right:0;height:4px}
+.bubble.dep::before{background:var(--azul2)}
+.bubble.risk::before{background:var(--rojo)}
+.bubble.warn::before{background:var(--naranja)}
+.bubble.approval::before{background:var(--verde)}
+.bubble .b-icon{font-size:1.8rem;margin-bottom:.6rem}
+.bubble .b-title{font-size:.9rem;font-weight:700;color:#111827;margin-bottom:.4rem}
+.bubble .b-desc{font-size:.78rem;color:var(--tx2);line-height:1.5}
+.info-box .box-title{font-weight:700;font-size:.88rem;color:#111827;margin-bottom:.3rem}
+.info-box .box-desc{font-size:.8rem;color:var(--tx2);line-height:1.5}
+.team-list{display:flex;flex-wrap:wrap;gap:.6rem;margin-bottom:1rem}
+.team-member{background:var(--blanco);border:1px solid var(--borde);border-radius:8px;padding:.4rem .8rem;font-size:.78rem;font-weight:500;color:var(--tx)}
+.team-member.lead{background:var(--azul);color:var(--blanco);border-color:var(--azul)}
+.arch-diagram{background:var(--blanco);border-radius:12px;padding:2rem;box-shadow:0 1px 3px rgba(0,0,0,.06);overflow-x:auto}
+.arch-flow{display:flex;flex-direction:column;align-items:center;gap:.8rem;min-width:700px}
+.arch-row{display:flex;align-items:center;justify-content:center;gap:1rem;flex-wrap:nowrap}
+.arch-box{color:var(--blanco);padding:.55rem 1rem;border-radius:8px;font-size:.76rem;font-weight:600;text-align:center;min-width:130px;box-shadow:0 2px 4px rgba(0,0,0,.15)}
+.arch-box.primary{background:var(--azul)}
+.arch-box.secondary{background:var(--azul2)}
+.arch-box.green{background:var(--verde)}
+.arch-box.orange{background:var(--naranja)}
+.arch-box.purple{background:#7c3aed}
+.arch-box.red{background:var(--rojo)}
+.arch-arrow{font-size:1.5rem;color:var(--tx3);line-height:1}
+.footer{padding:1rem 2.5rem;color:var(--tx3);font-size:.72rem;border-top:1px solid var(--borde);background:var(--blanco);text-align:center;margin-top:2rem}
+@media(max-width:900px){.tab-content{padding:1.5rem 1rem}.kpi-grid{grid-template-columns:repeat(2,1fr)}.arch-flow{min-width:auto}}
+@media(max-width:600px){.page-header{padding:1.5rem 1rem}.kpi-grid{grid-template-columns:1fr}.header-top{flex-direction:column;align-items:flex-start}.tabs{gap:.3rem}}
+</style>
+</head>
+<body>
+<div class="page-header">
+  <div class="header-top">
+    <h1 class="page-title">Informe Maestro - Gestion en Bienestar VP Negocios de Personas</h1>
+    <span class="jira-badge">2025</span>
+  </div>
+  <div class="tabs">
+    <div class="tab active" onclick="switchTab(0)">Informe Maestro</div>
+    <div class="tab" onclick="switchTab(1)">Arquitectura</div>
+    <div class="tab" onclick="switchTab(2)">Dependencias y APIs</div>
+  </div>
+</div>
+
+<!-- TAB 1: INFORME MAESTRO -->
+<div class="tab-content active" id="tab-0">
+  <div class="section">
+    <h2 class="section-title">1. Resumen Ejecutivo</h2>
+    <p style="font-size:.88rem;color:var(--tx);margin-bottom:1rem"><strong>Proyecto:</strong> Gestión en Bienestar VP Negocios de Personas 2025</p>
+    <h3 class="section-subtitle">Objetivo</h3>
+    <p style="font-size:.84rem;color:var(--tx2);margin-bottom:1.2rem">Implementar reglas de negocio para la generación de autorizaciones automáticas en Salud y ARL, disminuyendo procesos manuales y desarticulados. De 12 procesos diagnosticados se priorizaron 5: Parametrización, Suscripción y Prospección, Gestión de Aliados, Autorizaciones, Pago de Cuentas Médicas y Reservas.</p>
+    <div class="kpi-grid">
+      <div class="kpi-card green"><div class="value">90%</div><div class="label">Autorizaciones salud automáticas (actual: 52%)</div></div>
+      <div class="kpi-card orange"><div class="value">50%</div><div class="label">Autorizaciones ARL automáticas (actual: 0%)</div></div>
+      <div class="kpi-card green"><div class="value">28 FTEs</div><div class="label">Liberados en 2025</div></div>
+      <div class="kpi-card"><div class="value">5%</div><div class="label">Control umbral pertinencia médica</div></div>
+      <div class="kpi-card"><div class="value">90,000</div><div class="label">Autorizaciones/mes (volumen)</div></div>
+    </div>
+    <h3 class="section-subtitle">Beneficios</h3>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:.8rem;margin-bottom:1.5rem">
+      <div class="info-box"><div class="box-desc">Disminución en tiempos de espera por parte de clientes y proveedores al mejorar la oportunidad de generación de autorizaciones</div></div>
+      <div class="info-box"><div class="box-desc">Control y oportunidad en pagos a proveedores</div></div>
+      <div class="info-box"><div class="box-desc">Apoyo al crecimiento con facilidad de creación de nuevos productos de salud</div></div>
+      <div class="info-box"><div class="box-desc">Parametrización centralizada conectada con sistemas actuales y nuevos desarrollos para evitar validación manual en múltiples sistemas</div></div>
+      <div class="info-box"><div class="box-desc">Obtención de data para creación de alertas de fraude o abusos en tratamientos médicos</div></div>
+      <div class="info-box"><div class="box-desc">Herramienta de alerta para equipos médicos: acompañamiento y gerenciamiento de casos con desviaciones</div></div>
+      <div class="info-box"><div class="box-desc">Modelo operativo macro y estándar para articular iniciativas de operaciones ARL y Salud con un mismo objetivo</div></div>
+    </div>
+    <h3 class="section-subtitle">Focos Estratégicos</h3>
+    <div class="kpi-grid">
+      <div class="kpi-card green"><div class="value">Servicio</div><div class="label">Foco impactado</div></div>
+      <div class="kpi-card green"><div class="value">Clientes</div><div class="label">Foco impactado</div></div>
+    </div>
+  </div>
+  <div class="section">
+    <h2 class="section-title">2. Alcance del Proyecto</h2>
+    <p style="font-size:.84rem;color:var(--tx2);margin-bottom:1rem">De 12 procesos diagnosticados se priorizaron 5: Parametrización, Suscripción y Prospección, Gestión de Aliados, Autorizaciones, Pago de Cuentas Médicas y Reservas. El alcance 2026 se cerró con la implementación de Reglas de Negocio para autorizaciones automáticas Salud y la estructuración para ARL.</p>
+    <h3 class="section-subtitle">Semestre 1 — 2026: Autorizaciones Salud</h3>
+    <div class="tbl-wrap"><table><thead><tr><th>Entregable</th><th>Detalle</th></tr></thead><tbody>
+      <tr><td><strong>Front de parametrización y autorizaciones</strong></td><td>+23 nuevas tablas: Banco de coberturas, Periodo de carencia, Deducibles, Tipos de servicios vs CUPS, Homologación CUPS, Homologación CUMS, Configuración CIE-10, Parametrización de programas, Grupos de exclusiones, Modelo autorizador</td></tr>
+      <tr><td><strong>Estructuración emisión póliza salud</strong></td><td>Colectiva e individual: Coberturas, Periodos de carencia, Registro de exclusiones</td></tr>
+      <tr><td><strong>Estructuración información siniestro</strong></td><td>Marcación cliente por programa, Inclusión de diagnósticos delimitados</td></tr>
+      <tr><td><strong>Canales radicación autorización</strong></td><td>Página web e IVR para proveedores. Autorización automática baja complejidad + escalamiento alta complejidad</td></tr>
+      <tr><td><strong>40 reglas de negocio</strong></td><td>+50 validaciones con tecnología N8N para control de autorizaciones</td></tr>
+      <tr><td><strong>Conexión bases de datos</strong></td><td>Sisalud y Simón</td></tr>
+      <tr><td><strong>Definición parámetros ARL</strong></td><td>Reglas de negocio para autorizaciones automáticas ARL + conexiones con Sisalud ARL</td></tr>
+    </tbody></table></div>
+    <h3 class="section-subtitle">Semestre 2 — 2026: Autorizaciones ARL</h3>
+    <div class="info-box"><div class="box-desc">Se entregarán los desarrollos necesarios para Autorizaciones automáticas ARL completas.</div></div>
+  </div>
+  <div class="section">
+    <h2 class="section-title">3. Roadmap Abril 2026 — Comite Directivo</h2>
+    <p style="font-size:.82rem;color:var(--tx2);margin-bottom:1rem">Fuente: Comite Directivo GB y CM — 21/04/2026 + Modelo de Evolucion GB. Leyenda: (A)=Produccion, (N)=En progreso, (D)=Pruebas usuario. Avance total reglas: <strong>37%</strong></p>
+    <div class="tbl-wrap"><table><thead><tr><th colspan="4" style="background:#16a34a;text-align:center">Grupo 1</th></tr><tr><th>Entregable</th><th>Fecha</th><th>Avance</th><th>Estado</th></tr></thead><tbody>
+      <tr><td>Modelo Autorizador</td><td>30/03/26</td><td><strong>30%</strong></td><td><span class="badge badge-done">Produccion (A)</span></td></tr>
+      <tr><td>Configuracion detalles por Tipo de Servicio</td><td>12/03/26</td><td><strong>100%</strong></td><td><span class="badge badge-done">Produccion (A)</span></td></tr>
+      <tr><td>Configuracion Coberturas de 2 digitos</td><td>25/03/26</td><td><strong>80%</strong></td><td><span class="badge badge-done">Produccion (A)</span></td></tr>
+      <tr><td>Parametrizacion deducibles banco de coberturas</td><td>30/03/26</td><td><strong>100%</strong></td><td><span class="badge badge-progress">En progreso (N)</span></td></tr>
+      <tr><td>Disponible compartido por coberturas</td><td>06/04/26</td><td><strong>30%</strong></td><td><span class="badge badge-done">Produccion (A)</span></td></tr>
+      <tr><td>Regla Disponible compartido por coberturas</td><td>09/04/26</td><td><strong>30%</strong></td><td><span class="badge badge-done">Produccion (A)</span></td></tr>
+      <tr><td>Masivo deducibles</td><td>24/04/26</td><td><strong>30%</strong></td><td><span class="badge badge-progress">En progreso (N)</span></td></tr>
+      <tr><td>Regla calculo de deducible y creacion detalle</td><td>29/04/26</td><td><strong>30%</strong></td><td><span class="badge badge-blocked">Pruebas usuario (D)</span></td></tr>
+      <tr><td>Parametrizacion topes</td><td>29/04/26</td><td><strong>20%</strong></td><td><span class="badge badge-progress">En progreso (N)</span></td></tr>
+      <tr><td>Crear Autorizaciones en orientacion medica</td><td>04/05/26</td><td><strong>100%</strong></td><td><span class="badge badge-blocked">Pruebas usuario (D)</span></td></tr>
+      <tr><td>Regla topes</td><td>04/05/26</td><td><strong>20%</strong></td><td><span class="badge badge-progress">En progreso (N)</span></td></tr>
+      <tr><td>Almacenar documentos soporte</td><td>11/05/26</td><td><strong>0%</strong></td><td><span class="badge badge-done">Produccion (A)</span></td></tr>
+    </tbody></table></div>
+    <div class="tbl-wrap"><table><thead><tr><th colspan="4" style="background:#ea580c;text-align:center;color:#fff">Grupo 2</th></tr><tr><th>Entregable</th><th>Fecha</th><th>Avance</th><th>Estado</th></tr></thead><tbody>
+      <tr><td>Almacenar datos - Regla duplicados</td><td>20/05/26</td><td><strong>0%</strong></td><td><span class="badge badge-progress">En progreso (N)</span></td></tr>
+      <tr><td>Parametrizacion escalamiento - Mod individual</td><td>25/05/26</td><td><strong>0%</strong></td><td><span class="badge badge-progress">En progreso (N)</span></td></tr>
+      <tr><td>Reglas opciones de poliza</td><td>26/05/26</td><td><strong>100%</strong></td><td><span class="badge badge-blocked">Pruebas usuario (D)</span></td></tr>
+      <tr><td>Primera vez vs control - parametro y modulo</td><td>27/05/26</td><td><strong>0%</strong></td><td><span class="badge badge-done">Produccion (A)</span></td></tr>
+      <tr><td>Solicitud documentos front</td><td>02/06/26</td><td><strong>0%</strong></td><td><span class="badge badge-progress">En progreso (N)</span></td></tr>
+      <tr><td>Reglas periodos de carencia</td><td>09/06/26</td><td><strong>60%</strong></td><td><span class="badge badge-blocked">Pruebas usuario (D)</span></td></tr>
+      <tr><td>Control primera vez vs control - ajuste front</td><td>26/06/26</td><td><strong>0%</strong></td><td><span class="badge badge-progress">En progreso (N)</span></td></tr>
+      <tr><td>Ajuste modales convenio, edad y genero vs CUPS</td><td>26/06/26</td><td><strong>100%</strong></td><td><span class="badge badge-progress">En progreso (N)</span></td></tr>
+      <tr><td>Control primera vez vs control - regla</td><td>01/07/26</td><td><strong>0%</strong></td><td><span class="badge badge-blocked">Pruebas usuario (D)</span></td></tr>
+      <tr><td>Prestacion efectiva (parametro y regla)</td><td>02/07/26</td><td><strong>30%</strong></td><td><span class="badge badge-progress">En progreso (N)</span></td></tr>
+      <tr><td>Spike: revision CUPS sigla DOM</td><td>07/07/26</td><td><strong>0%</strong></td><td><span class="badge badge-blocked">Pruebas usuario (D)</span></td></tr>
+      <tr><td>Ajuste cargues masivos - hasta 1m registros</td><td>09/07/26</td><td><strong>0%</strong></td><td><span class="badge badge-done">Produccion (A)</span></td></tr>
+    </tbody></table></div>
+    <div class="tbl-wrap"><table><thead><tr><th colspan="4" style="background:#8b5cf6;text-align:center;color:#fff">Grupo 3</th></tr><tr><th>Entregable</th><th>Fecha</th><th>Avance</th><th>Estado</th></tr></thead><tbody>
+      <tr><td>Masivo escalamiento</td><td>—</td><td><strong>0%</strong></td><td><span class="badge badge-pending">No iniciado</span></td></tr>
+      <tr><td>Ver Soportes en la autorizacion (LM)</td><td>—</td><td><strong>0%</strong></td><td><span class="badge badge-pending">No iniciado</span></td></tr>
+      <tr><td>Ajuste front cuando CUPS requiere OM</td><td>—</td><td><strong>0%</strong></td><td><span class="badge badge-pending">No iniciado</span></td></tr>
+      <tr><td>Laboratorio a domicilio</td><td>—</td><td><strong>0%</strong></td><td><span class="badge badge-pending">No iniciado</span></td></tr>
+      <tr><td>Modulo proveedores consulta autorizaciones</td><td>—</td><td><strong>0%</strong></td><td><span class="badge badge-pending">No iniciado</span></td></tr>
+      <tr><td>Mas de una poliza y mas de una cobertura</td><td>—</td><td><strong>0%</strong></td><td><span class="badge badge-pending">No iniciado</span></td></tr>
+      <tr><td>Regla deducible cero lab o Apoyo Diagnostico</td><td>—</td><td><strong>0%</strong></td><td><span class="badge badge-pending">No iniciado</span></td></tr>
+      <tr><td>Livechat</td><td>—</td><td><strong>0%</strong></td><td><span class="badge badge-pending">No iniciado</span></td></tr>
+    </tbody></table></div>
+  </div>
+  <div class="section">
+    <h2 class="section-title">4. Contenido Estrategico</h2>
+    <h3 class="section-subtitle">Focos Impactados</h3>
+    <p style="font-size:.84rem;color:var(--tx2);margin-bottom:1rem"><strong>Servicio + Clientes</strong> — Pilares estrategicos Seguros Bolivar</p>
+    <h3 class="section-subtitle">Justificacion</h3>
+    <div class="info-box"><div class="box-title">Impacto en riesgo operativo, digital y estabilizacion</div><div class="box-desc">La automatizacion reduce la dependencia de 48 auxiliares manuales, disminuye riesgos operativos y permite escalar el volumen de autorizaciones sin incrementar headcount.</div></div>
+    <h3 class="section-subtitle">Dolores Identificados</h3>
+    <div class="info-box risk"><div class="box-title">Riesgos operativos por 48 auxiliares manuales</div><div class="box-desc">Sobrecostos de siniestralidad | Demoras en autorizaciones de baja complejidad | Dependencia total de recurso humano para consultas, terapias, laboratorios y examenes</div></div>
+  </div>
+  <div class="section">
+    <h2 class="section-title">5. Matriz de Coherencia</h2>
+    <div class="tbl-wrap"><table><thead><tr><th>Aspecto</th><th>Resultado</th><th>Detalle</th></tr></thead><tbody>
+      <tr><td><strong>Coherencia Tecnica</strong></td><td><span class="badge badge-done">Positiva</span></td><td>Guia exige Diagrama Arquitectura → existe san_andres_2024_alcance_1_v3.drawio.png</td></tr>
+      <tr><td><strong>Coherencia Financiera</strong></td><td><span class="badge badge-done">Positiva</span></td><td>Campos CAPEX/OPEX de Guia → metodologia Planeacion (millones, 4 años)</td></tr>
+      <tr><td><strong>Discrepancia</strong></td><td><span class="badge badge-blocked">Atencion</span></td><td>No se cuenta con PPT de stakeholders para cruzar argumentos gerenciales</td></tr>
+    </tbody></table></div>
+  </div>
+  <div class="section">
+    <h2 class="section-title">6. Dependencias y Riesgos</h2>
+    <div class="bubble-grid">
+      <div class="bubble dep">
+        <div class="b-icon">🔗</div>
+        <div class="b-title">Dep: Squad Obsolescencia LM</div>
+        <div class="b-desc">Validaciones de autorizacion dependientes del squad de Obsolescencia Linea Medica. Sin estas validaciones, el motor de autorizaciones automaticas no puede operar.</div>
+      </div>
+      <div class="bubble dep">
+        <div class="b-icon">🔗</div>
+        <div class="b-title">Dep: Bizagi (Gestion Back)</div>
+        <div class="b-desc">Flujos de trabajo y gestion de back-office operan sobre Bizagi BPMS. Cualquier cambio en los flujos requiere coordinacion con el equipo de Bizagi.</div>
+      </div>
+      <div class="bubble dep">
+        <div class="b-icon">🔗</div>
+        <div class="b-title">Dep: Squad Carpeta Unica / Oleary</div>
+        <div class="b-desc">Almacenamiento de documentos y soportes medicos. Sin integracion con Carpeta Unica (Oleary), no se pueden gestionar los soportes de autorizaciones.</div>
+      </div>
+      <div class="bubble dep">
+        <div class="b-icon">🔗</div>
+        <div class="b-title">Dep: Tribu Canales (Livechat + Callback)</div>
+        <div class="b-desc">Canales de atencion al asegurado y prestador. Livechat y Callback son los puntos de contacto para solicitudes y seguimiento de autorizaciones.</div>
+      </div>
+      <div class="bubble risk">
+        <div class="b-icon">⚠️</div>
+        <div class="b-title">Riesgo: Inestabilidad sistemas actuales</div>
+        <div class="b-desc">Los sistemas legacy actuales presentan inestabilidad que puede afectar la transicion hacia la automatizacion. Caidas frecuentes impactan la operacion manual y la automatica.</div>
+      </div>
+      <div class="bubble risk">
+        <div class="b-icon">⚠️</div>
+        <div class="b-title">Riesgo: Dedicacion insuficiente equipo base</div>
+        <div class="b-desc">El equipo base puede no tener la dedicacion necesaria para cumplir los hitos del proyecto, dado que atiende simultaneamente operacion BAU y nuevos desarrollos.</div>
+      </div>
+      <div class="bubble warn">
+        <div class="b-icon">⚠️</div>
+        <div class="b-title">Riesgo: Cambios de alcance en etapas avanzadas</div>
+        <div class="b-desc">Modificaciones al alcance en fases avanzadas del proyecto generan reprocesos, retrasos y sobrecostos. Requiere gobernanza estricta de cambios.</div>
+      </div>
+      <div class="bubble approval">
+        <div class="b-icon">📋</div>
+        <div class="b-title">Aprobaciones Requeridas</div>
+        <div class="b-desc">Cumplimiento: Nidia Wong | Riesgos: Cesar Soto | Juridica: Jose David Gomez | Seguridad: Adriana Quintero</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 2: ARQUITECTURA -->
+<div class="tab-content" id="tab-1">
+  <div class="section">
+    <h2 class="section-title">Arquitectura del Sistema — Cross-Cloud</h2>
+    <div style="background:#0f172a;border-radius:16px;padding:2.5rem;position:relative;overflow:hidden;min-height:650px">
+      <!-- Nodo central -->
+      <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:150px;height:150px;border-radius:50%;background:radial-gradient(circle,#38bdf8 0%,#0066cc 60%,#003366 100%);display:flex;align-items:center;justify-content:center;flex-direction:column;box-shadow:0 0 60px rgba(56,189,248,.4);z-index:10">
+        <span style="color:#94a3b8;font-size:.65rem">Cross-cloud</span>
+        <span style="color:#fff;font-size:1rem;font-weight:800">Gestión</span>
+        <span style="color:#fff;font-size:.85rem;font-weight:700">Bienestar</span>
+        <span style="color:#93c5fd;font-size:.65rem">Autorizaciones</span>
+      </div>
+      <!-- Líneas SVG -->
+      <svg style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:1" viewBox="0 0 1000 650">
+        <line x1="500" y1="325" x2="250" y2="100" stroke="#f87171" stroke-width="1.5" opacity=".3" stroke-dasharray="4"/>
+        <line x1="500" y1="325" x2="700" y2="80" stroke="#fbbf24" stroke-width="1.5" opacity=".3" stroke-dasharray="4"/>
+        <line x1="500" y1="325" x2="150" y2="320" stroke="#fbbf24" stroke-width="1.5" opacity=".3" stroke-dasharray="4"/>
+        <line x1="500" y1="325" x2="820" y2="250" stroke="#f87171" stroke-width="1.5" opacity=".3" stroke-dasharray="4"/>
+        <line x1="500" y1="325" x2="750" y2="420" stroke="#fbbf24" stroke-width="1.5" opacity=".3" stroke-dasharray="4"/>
+        <line x1="500" y1="325" x2="180" y2="520" stroke="#f87171" stroke-width="1.5" opacity=".3" stroke-dasharray="4"/>
+        <line x1="500" y1="325" x2="550" y2="570" stroke="#f87171" stroke-width="1.5" opacity=".3" stroke-dasharray="4"/>
+      </svg>
+      <!-- GCP Gestor Documental -->
+      <div style="position:absolute;top:8%;left:15%;z-index:5">
+        <div style="border:2px solid #f87171;border-radius:12px;padding:.8rem 1.2rem;background:rgba(15,23,42,.9)">
+          <span style="position:absolute;top:-.5rem;right:-.3rem;background:#f87171;color:#fff;font-size:.55rem;padding:.1rem .4rem;border-radius:4px;font-weight:700">Alto</span>
+          <div style="color:#fff;font-size:.82rem;font-weight:700">GCP Gestor Documental</div>
+          <span style="background:#4ade80;color:#000;font-size:.55rem;padding:.1rem .4rem;border-radius:4px;font-weight:600">GCP</span>
+        </div>
+      </div>
+      <!-- AWS APIs PROD -->
+      <div style="position:absolute;top:5%;right:20%;z-index:5">
+        <div style="border:2px solid #fbbf24;border-radius:12px;padding:.8rem 1.2rem;background:rgba(15,23,42,.9)">
+          <span style="position:absolute;top:-.5rem;right:-.3rem;background:#fbbf24;color:#000;font-size:.55rem;padding:.1rem .4rem;border-radius:4px;font-weight:700">Medio</span>
+          <div style="color:#fff;font-size:.82rem;font-weight:700">AWS APIs PROD</div>
+          <span style="background:#fb923c;color:#fff;font-size:.55rem;padding:.1rem .4rem;border-radius:4px;font-weight:600">AWS</span>
+        </div>
+      </div>
+      <!-- GCP Data Operativa -->
+      <div style="position:absolute;top:38%;left:3%;z-index:5">
+        <div style="border:2px solid #4ade80;border-radius:12px;padding:.8rem 1.2rem;background:rgba(15,23,42,.9)">
+          <span style="position:absolute;top:-.5rem;right:-.3rem;background:#fbbf24;color:#000;font-size:.55rem;padding:.1rem .4rem;border-radius:4px;font-weight:700">Medio</span>
+          <div style="color:#fff;font-size:.82rem;font-weight:700">GCP Data Operativa</div>
+          <span style="background:#4ade80;color:#000;font-size:.55rem;padding:.1rem .4rem;border-radius:4px;font-weight:600">GCP</span>
+        </div>
+        <div style="color:#64748b;font-size:.6rem;margin-top:.3rem;padding-left:.3rem">Data Operativa</div>
+      </div>
+      <!-- AWS APIs COMMONS -->
+      <div style="position:absolute;top:28%;right:5%;z-index:5">
+        <div style="border:2px solid #38bdf8;border-radius:12px;padding:.8rem 1.2rem;background:rgba(15,23,42,.9)">
+          <span style="position:absolute;top:-.5rem;right:-.3rem;background:#f87171;color:#fff;font-size:.55rem;padding:.1rem .4rem;border-radius:4px;font-weight:700">Alto</span>
+          <div style="color:#fff;font-size:.82rem;font-weight:700">AWS APIs COMMONS</div>
+          <span style="background:#fb923c;color:#fff;font-size:.55rem;padding:.1rem .4rem;border-radius:4px;font-weight:600">AWS</span>
+        </div>
+      </div>
+      <!-- AWS Reglas Negocio -->
+      <div style="position:absolute;top:55%;right:12%;z-index:5">
+        <div style="border:2px solid #a78bfa;border-radius:12px;padding:.8rem 1.2rem;background:rgba(15,23,42,.9)">
+          <span style="position:absolute;top:-.5rem;right:-.3rem;background:#fbbf24;color:#000;font-size:.55rem;padding:.1rem .4rem;border-radius:4px;font-weight:700">Medio</span>
+          <div style="color:#fff;font-size:.82rem;font-weight:700">AWS Reglas Negocio</div>
+          <span style="background:#fb923c;color:#fff;font-size:.55rem;padding:.1rem .4rem;border-radius:4px;font-weight:600">AWS</span>
+        </div>
+        <div style="color:#64748b;font-size:.6rem;margin-top:.3rem;padding-left:.3rem">Reglas</div>
+      </div>
+      <!-- GCP IA Autorizaciones -->
+      <div style="position:absolute;top:72%;left:8%;z-index:5">
+        <div style="border:2px solid #4ade80;border-radius:12px;padding:.8rem 1.2rem;background:rgba(15,23,42,.9)">
+          <span style="position:absolute;top:-.5rem;right:-.3rem;background:#f87171;color:#fff;font-size:.55rem;padding:.1rem .4rem;border-radius:4px;font-weight:700">Alto</span>
+          <div style="color:#fff;font-size:.82rem;font-weight:700">GCP IA Autorizaciones</div>
+          <span style="background:#4ade80;color:#000;font-size:.55rem;padding:.1rem .4rem;border-radius:4px;font-weight:600">GCP</span>
+        </div>
+        <div style="color:#64748b;font-size:.6rem;margin-top:.3rem;padding-left:.3rem">Data IA</div>
+      </div>
+      <!-- TRONADOR On-Premise -->
+      <div style="position:absolute;top:78%;left:40%;z-index:5">
+        <div style="border:2px solid #6b7280;border-radius:12px;padding:.8rem 1.2rem;background:rgba(15,23,42,.9)">
+          <span style="position:absolute;top:-.5rem;right:-.3rem;background:#f87171;color:#fff;font-size:.55rem;padding:.1rem .4rem;border-radius:4px;font-weight:700">Alto</span>
+          <div style="color:#fff;font-size:.82rem;font-weight:700">TRONADOR On-Premise</div>
+          <span style="background:#6b7280;color:#fff;font-size:.55rem;padding:.1rem .4rem;border-radius:4px;font-weight:600">On-Prem</span>
+        </div>
+      </div>
+      <!-- Leyenda -->
+      <div style="position:absolute;bottom:1rem;right:1.5rem;z-index:10;display:flex;gap:1rem;align-items:center">
+        <div style="display:flex;align-items:center;gap:.3rem"><div style="width:10px;height:10px;border-radius:50%;background:#4ade80"></div><span style="color:#94a3b8;font-size:.6rem">GCP</span></div>
+        <div style="display:flex;align-items:center;gap:.3rem"><div style="width:10px;height:10px;border-radius:50%;background:#fb923c"></div><span style="color:#94a3b8;font-size:.6rem">AWS</span></div>
+        <div style="display:flex;align-items:center;gap:.3rem"><div style="width:10px;height:10px;border-radius:50%;background:#6b7280"></div><span style="color:#94a3b8;font-size:.6rem">On-Prem</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="section">
+    <h2 class="section-title">Componentes Clave</h2>
+    <div class="tbl-wrap"><table><thead><tr><th>Componente</th><th>Plataforma</th><th>Impacto</th><th>Función</th></tr></thead><tbody>
+      <tr><td>GCP Gestor Documental</td><td>GCP</td><td><span class="badge badge-pending">Alto</span></td><td>Almacenamiento y gestión de documentos soporte (Oleary)</td></tr>
+      <tr><td>AWS APIs PROD</td><td>AWS</td><td><span class="badge badge-blocked">Medio</span></td><td>Microservicios de autorizaciones (gb-autorizacion-salud, arl, transversal)</td></tr>
+      <tr><td>GCP Data Operativa</td><td>GCP</td><td><span class="badge badge-blocked">Medio</span></td><td>Lago de datos operativo para consultas y reportes</td></tr>
+      <tr><td>AWS APIs COMMONS</td><td>AWS</td><td><span class="badge badge-pending">Alto</span></td><td>Servicios compartidos (comunes-dev-core, parametrizador-ms)</td></tr>
+      <tr><td>AWS Reglas Negocio</td><td>AWS</td><td><span class="badge badge-blocked">Medio</span></td><td>Motor n8n + Lambda: 40 reglas con +50 validaciones</td></tr>
+      <tr><td>GCP IA Autorizaciones</td><td>GCP</td><td><span class="badge badge-pending">Alto</span></td><td>Modelos IA para OCR, pertinencia médica y detección fraude</td></tr>
+      <tr><td>TRONADOR On-Premise</td><td>On-Prem</td><td><span class="badge badge-pending">Alto</span></td><td>Oracle DB: SISALUD Salud, SISALUD ARL, TRON (pólizas)</td></tr>
+    </tbody></table></div>
+  </div>
+</div>
+
+<!-- TAB 3: DEPENDENCIAS APIs POR SQUAD -->
+<div class="tab-content" id="tab-2">
+  <div class="section">
+    <h2 class="section-title">Dependencias APIs por Squad</h2>
+    <div style="background:#0f172a;border-radius:16px;padding:2rem;position:relative;overflow:hidden;min-height:700px">
+      <!-- Nodo central -->
+      <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:140px;height:140px;border-radius:50%;background:radial-gradient(circle,#38bdf8 0%,#0066cc 60%,#003366 100%);display:flex;align-items:center;justify-content:center;flex-direction:column;box-shadow:0 0 60px rgba(56,189,248,.4);z-index:10">
+        <span style="color:#fff;font-size:.9rem;font-weight:800">Gestion</span>
+        <span style="color:#93c5fd;font-size:.7rem">Bienestar</span>
+      </div>
+      <!-- Lineas SVG -->
+      <svg style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:1" viewBox="0 0 1000 700">
+        <line x1="500" y1="350" x2="180" y2="130" stroke="#fb923c" stroke-width="1" opacity=".4"/>
+        <line x1="500" y1="350" x2="150" y2="350" stroke="#38bdf8" stroke-width="1" opacity=".4"/>
+        <line x1="500" y1="350" x2="200" y2="560" stroke="#f87171" stroke-width="1" opacity=".4"/>
+        <line x1="500" y1="350" x2="750" y2="150" stroke="#4ade80" stroke-width="1" opacity=".4"/>
+        <line x1="500" y1="350" x2="780" y2="450" stroke="#a78bfa" stroke-width="1" opacity=".4"/>
+      </svg>
+      <!-- Grupo: Obsolescencia LM (naranja) -->
+      <div style="position:absolute;top:10%;left:8%;z-index:5">
+        <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.4rem">
+          <div style="width:28px;height:28px;border-radius:50%;background:#fb923c;border:3px solid #9a3412;display:flex;align-items:center;justify-content:center;font-size:.7rem">⚙️</div>
+          <span style="color:#fb923c;font-size:.78rem;font-weight:700">Obsolescencia LM</span>
+          <span style="background:#fb923c;color:#fff;font-size:.55rem;padding:.1rem .4rem;border-radius:4px;font-weight:600">—</span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:.3rem;padding-left:1.5rem">
+          <div style="display:flex;align-items:center;gap:.3rem"><div style="width:14px;height:14px;border-radius:50%;background:#fb923c;border:2px solid #9a3412"></div><span style="color:#94a3b8;font-size:.65rem">validacion-autorizacion</span></div>
+          <div style="display:flex;align-items:center;gap:.3rem"><div style="width:14px;height:14px;border-radius:50%;background:#fb923c;border:2px solid #9a3412"></div><span style="color:#94a3b8;font-size:.65rem">consulta-pertinencia</span></div>
+          <div style="display:flex;align-items:center;gap:.3rem"><div style="width:14px;height:14px;border-radius:50%;background:#fb923c;border:2px solid #9a3412"></div><span style="color:#94a3b8;font-size:.65rem">reglas-cobertura</span></div>
+        </div>
+      </div>
+      <!-- Grupo: Bizagi (azul) -->
+      <div style="position:absolute;top:38%;left:3%;z-index:5">
+        <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.4rem">
+          <div style="width:28px;height:28px;border-radius:50%;background:#38bdf8;border:3px solid #0369a1;display:flex;align-items:center;justify-content:center;font-size:.7rem">🔄</div>
+          <span style="color:#38bdf8;font-size:.78rem;font-weight:700">Bizagi</span>
+          <span style="background:#fbbf24;color:#000;font-size:.55rem;padding:.1rem .4rem;border-radius:4px;font-weight:600">MEDIO</span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:.3rem;padding-left:1.5rem">
+          <div style="display:flex;align-items:center;gap:.3rem"><div style="width:14px;height:14px;border-radius:50%;background:#38bdf8;border:2px solid #0c4a6e"></div><span style="color:#94a3b8;font-size:.65rem">gestion-back-flujos</span></div>
+          <div style="display:flex;align-items:center;gap:.3rem"><div style="width:14px;height:14px;border-radius:50%;background:#38bdf8;border:2px solid #0c4a6e"></div><span style="color:#94a3b8;font-size:.65rem">workflow-autorizacion</span></div>
+        </div>
+      </div>
+      <!-- Grupo: Carpeta Unica (rojo) -->
+      <div style="position:absolute;top:72%;left:10%;z-index:5">
+        <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.4rem">
+          <div style="width:28px;height:28px;border-radius:50%;background:#f87171;border:3px solid #991b1b;display:flex;align-items:center;justify-content:center;font-size:.7rem">📁</div>
+          <span style="color:#f87171;font-size:.78rem;font-weight:700">Carpeta Unica</span>
+          <span style="background:#f87171;color:#fff;font-size:.55rem;padding:.1rem .4rem;border-radius:4px;font-weight:600">ALTO</span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:.3rem;padding-left:1.5rem">
+          <div style="display:flex;align-items:center;gap:.3rem"><div style="width:14px;height:14px;border-radius:50%;background:#f87171;border:2px solid #7f1d1d"></div><span style="color:#94a3b8;font-size:.65rem">almacenamiento-docs</span></div>
+          <div style="display:flex;align-items:center;gap:.3rem"><div style="width:14px;height:14px;border-radius:50%;background:#f87171;border:2px solid #7f1d1d"></div><span style="color:#94a3b8;font-size:.65rem">gestor-soportes</span></div>
+        </div>
+      </div>
+      <!-- Grupo: Tribu Canales (verde) -->
+      <div style="position:absolute;top:12%;right:10%;z-index:5">
+        <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.4rem">
+          <div style="width:28px;height:28px;border-radius:50%;background:#4ade80;border:3px solid #166534;display:flex;align-items:center;justify-content:center;font-size:.7rem">💬</div>
+          <span style="color:#4ade80;font-size:.78rem;font-weight:700">Tribu Canales</span>
+          <span style="background:#f87171;color:#fff;font-size:.55rem;padding:.1rem .4rem;border-radius:4px;font-weight:600">ALTO</span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:.3rem;padding-left:1.5rem">
+          <div style="display:flex;align-items:center;gap:.3rem"><div style="width:14px;height:14px;border-radius:50%;background:#4ade80;border:2px solid #166534"></div><span style="color:#94a3b8;font-size:.65rem">livechat-asegurado</span></div>
+          <div style="display:flex;align-items:center;gap:.3rem"><div style="width:14px;height:14px;border-radius:50%;background:#4ade80;border:2px solid #166534"></div><span style="color:#94a3b8;font-size:.65rem">callback-prestador</span></div>
+        </div>
+      </div>
+      <!-- Grupo: Interno (purpura) -->
+      <div style="position:absolute;top:55%;right:8%;z-index:5">
+        <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.4rem">
+          <div style="width:28px;height:28px;border-radius:50%;background:#a78bfa;border:3px solid #5b21b6;display:flex;align-items:center;justify-content:center;font-size:.7rem">🏠</div>
+          <span style="color:#a78bfa;font-size:.78rem;font-weight:700">Interno</span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:.3rem;padding-left:1.5rem">
+          <div style="display:flex;align-items:center;gap:.3rem"><div style="width:14px;height:14px;border-radius:50%;background:#a78bfa;border:2px solid #5b21b6"></div><span style="color:#94a3b8;font-size:.65rem">info-OM</span></div>
+          <div style="display:flex;align-items:center;gap:.3rem"><div style="width:14px;height:14px;border-radius:50%;background:#a78bfa;border:2px solid #5b21b6"></div><span style="color:#94a3b8;font-size:.65rem">info-afiliacion</span></div>
+          <div style="display:flex;align-items:center;gap:.3rem"><div style="width:14px;height:14px;border-radius:50%;background:#a78bfa;border:2px solid #5b21b6"></div><span style="color:#94a3b8;font-size:.65rem">ampliacion</span></div>
+          <div style="display:flex;align-items:center;gap:.3rem"><div style="width:14px;height:14px;border-radius:50%;background:#a78bfa;border:2px solid #5b21b6"></div><span style="color:#94a3b8;font-size:.65rem">cargas-masivas</span></div>
+          <div style="display:flex;align-items:center;gap:.3rem"><div style="width:14px;height:14px;border-radius:50%;background:#a78bfa;border:2px solid #5b21b6"></div><span style="color:#94a3b8;font-size:.65rem">parametrizacion-red</span></div>
+        </div>
+      </div>
+      <!-- Leyenda -->
+      <div style="position:absolute;bottom:1.2rem;left:2rem;z-index:10;display:flex;gap:1.2rem;align-items:center">
+        <div style="display:flex;align-items:center;gap:.3rem"><div style="width:12px;height:12px;border-radius:50%;background:#4ade80"></div><span style="color:#94a3b8;font-size:.65rem">Disponible</span></div>
+        <div style="display:flex;align-items:center;gap:.3rem"><div style="width:12px;height:12px;border-radius:50%;background:#fb923c"></div><span style="color:#94a3b8;font-size:.65rem">En desarrollo</span></div>
+        <div style="display:flex;align-items:center;gap:.3rem"><div style="width:12px;height:12px;border-radius:50%;background:#f87171"></div><span style="color:#94a3b8;font-size:.65rem">No iniciado</span></div>
+      </div>
+      <!-- Contador -->
+      <div style="position:absolute;bottom:1.2rem;right:2rem;z-index:10">
+        <span style="color:#38bdf8;font-size:.85rem;font-weight:700">15 APIs</span>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- FOOTER -->
+<div class="footer">Generado automaticamente — Informe Maestro Gestion en Bienestar — Mayo 2026</div>
+<script>
+function switchTab(i){
+  document.querySelectorAll('.tab-content').forEach((el,idx)=>{el.classList.toggle('active',idx===i)});
+  document.querySelectorAll('.tab').forEach((el,idx)=>{el.classList.toggle('active',idx===i)});
+}
+</script>
+</body>
+</html>
