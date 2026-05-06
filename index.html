@@ -40,6 +40,8 @@ tr:hover{background:#f9fafb}
 .badge-progress{background:#fef9c3;color:var(--amarillo)}
 .badge-blocked{background:#fed7aa;color:var(--naranja)}
 .badge-pending{background:#fee2e2;color:var(--rojo)}
+.badge-pap{background:#e0f2fe;color:#0369a1}
+.badge-pruebas{background:#f3e8ff;color:#7c3aed}
 .info-box{background:var(--blanco);border-radius:10px;padding:1.2rem 1.5rem;box-shadow:0 1px 3px rgba(0,0,0,.06);margin-bottom:1rem;border-left:4px solid var(--azul2)}
 .info-box.risk{border-left-color:var(--rojo)}
 .info-box.warning{border-left-color:var(--naranja)}
@@ -136,19 +138,19 @@ tr:hover{background:#f9fafb}
   </div>
   <div class="section">
     <h2 class="section-title">3. Roadmap Abril 2026 — Comite Directivo</h2>
-    <p style="font-size:.82rem;color:var(--tx2);margin-bottom:1rem">Fuente: Comite Directivo GB y CM — 21/04/2026 + Modelo de Evolucion GB. Leyenda: 0% = No iniciado | 1-99% = En proceso | 100% = Produccion. Avance total reglas: <strong>37%</strong></p>
+    <p style="font-size:.82rem;color:var(--tx2);margin-bottom:1rem">Fuente: Comite Directivo GB y CM — 21/04/2026 + Modelo de Evolucion GB. Leyenda: <span class="badge badge-done">Produccion</span> <span class="badge badge-pap">PAP</span> <span class="badge badge-pruebas">Pruebas</span> <span class="badge badge-progress">En proceso</span> <span class="badge badge-pending">No iniciado</span>. Avance total reglas: <strong>37%</strong></p>
     <div class="tbl-wrap"><table><thead><tr><th colspan="4" style="background:#16a34a;text-align:center">Grupo 1</th></tr><tr><th>Entregable</th><th>Fecha</th><th>Avance</th><th>Estado</th></tr></thead><tbody>
-      <tr><td>Modelo Autorizador</td><td>30/03/26</td><td><strong>30%</strong></td><td><span class="badge badge-progress">En proceso</span></td></tr>
+      <tr><td>Modelo Autorizador</td><td>30/03/26</td><td><strong>95%</strong></td><td><span class="badge badge-pap">PAP</span></td></tr>
       <tr><td>Configuracion detalles por Tipo de Servicio</td><td>12/03/26</td><td><strong>100%</strong></td><td><span class="badge badge-done">Produccion</span></td></tr>
-      <tr><td>Configuracion Coberturas de 2 digitos</td><td>25/03/26</td><td><strong>80%</strong></td><td><span class="badge badge-progress">En proceso</span></td></tr>
+      <tr><td>Configuracion Coberturas de 2 digitos</td><td>25/03/26</td><td><strong>95%</strong></td><td><span class="badge badge-pap">PAP</span></td></tr>
       <tr><td>Parametrizacion deducibles banco de coberturas</td><td>30/03/26</td><td><strong>100%</strong></td><td><span class="badge badge-done">Produccion</span></td></tr>
-      <tr><td>Disponible compartido por coberturas</td><td>06/04/26</td><td><strong>30%</strong></td><td><span class="badge badge-progress">En proceso</span></td></tr>
-      <tr><td>Regla Disponible compartido por coberturas</td><td>09/04/26</td><td><strong>30%</strong></td><td><span class="badge badge-progress">En proceso</span></td></tr>
-      <tr><td>Masivo deducibles</td><td>24/04/26</td><td><strong>30%</strong></td><td><span class="badge badge-progress">En proceso</span></td></tr>
-      <tr><td>Regla calculo de deducible y creacion detalle</td><td>29/04/26</td><td><strong>30%</strong></td><td><span class="badge badge-progress">En proceso</span></td></tr>
-      <tr><td>Parametrizacion topes</td><td>29/04/26</td><td><strong>20%</strong></td><td><span class="badge badge-progress">En proceso</span></td></tr>
-      <tr><td>Crear Autorizaciones en orientacion medica</td><td>04/05/26</td><td><strong>100%</strong></td><td><span class="badge badge-done">Produccion</span></td></tr>
-      <tr><td>Regla topes</td><td>04/05/26</td><td><strong>20%</strong></td><td><span class="badge badge-progress">En proceso</span></td></tr>
+      <tr><td>Disponible compartido por coberturas</td><td>06/04/26</td><td><strong>95%</strong></td><td><span class="badge badge-pap">PAP</span></td></tr>
+      <tr><td>Regla Disponible compartido por coberturas</td><td>09/04/26</td><td><strong>95%</strong></td><td><span class="badge badge-pap">PAP</span></td></tr>
+      <tr><td>Masivo deducibles</td><td>24/04/26</td><td><strong>80%</strong></td><td><span class="badge badge-pruebas">Pruebas</span></td></tr>
+      <tr><td>Regla calculo de deducible y creacion detalle</td><td>29/04/26</td><td><strong>80%</strong></td><td><span class="badge badge-pruebas">Pruebas</span></td></tr>
+      <tr><td>Parametrizacion topes</td><td>29/04/26</td><td><strong>80%</strong></td><td><span class="badge badge-pruebas">Pruebas</span></td></tr>
+      <tr><td>Crear Autorizaciones en orientacion medica</td><td>04/05/26</td><td><strong>70%</strong></td><td><span class="badge badge-progress">En proceso</span></td></tr>
+      <tr><td>Regla topes</td><td>04/05/26</td><td><strong>70%</strong></td><td><span class="badge badge-progress">En proceso</span></td></tr>
       <tr><td>Almacenar documentos soporte</td><td>11/05/26</td><td><strong>0%</strong></td><td><span class="badge badge-pending">No iniciado</span></td></tr>
     </tbody></table></div>
     <div class="tbl-wrap"><table><thead><tr><th colspan="4" style="background:#ea580c;text-align:center;color:#fff">Grupo 2</th></tr><tr><th>Entregable</th><th>Fecha</th><th>Avance</th><th>Estado</th></tr></thead><tbody>
